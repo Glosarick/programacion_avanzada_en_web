@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<html>
+<body> 
+
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid grey"></canvas>
+
+<script>
+const c = document.getElementById("myCanvas");
+const ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(50, 50);
+ctx.lineTo(50, 115);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(50, 50);
+ctx.lineTo(115, 110);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(50,115);
+ctx.lineTo(115, 110);
+ctx.stroke();
+</script>
+
 </body>
-</html>l
+</html>
