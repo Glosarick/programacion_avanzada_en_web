@@ -5,8 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>cuadrados</title>
 </head>
+<style>
+    #canvas{
+
+        width: 2000;
+        height:200;
+        border: 1px solid black;
+    }
+</style>
 <body>
-    <h1>vamonos recio</h1>
-    #mi primera pagina <web id="gfchgvhbjn"></web>
+     
+    <canvas id="canvas"></canvas>
+
+    
 </body>
-</html>
+ <script>
+
+var canvas = document.getElementById('canvas')
+
+//var contex = canvas.getContext('2d')
+
+var ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "rgb(200,0,0)";
+ctx.fillRect (5, 5, 50, 50);
+
+ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+ ctx.fillRect (30, 30, 50, 50);
+
+ ctx.fillStyle = "rgba(46, 204, 113)";
+ ctx.fillRect (70, 60, 50, 50);
+
+//contex.fillStyles = "#FF0000";
+
+//contex.fillRect(20,20,20,20)
+
+ </script>
+</html>  
