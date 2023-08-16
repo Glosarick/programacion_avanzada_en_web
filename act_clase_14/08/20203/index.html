@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> arcos</title>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="1000" height="500" style="border:1px solid grey"></canvas>
+<script>
+const c = document.getElementById("myCanvas");
+const ctx = c.getContext("2d");
+
+/////////////////////////////////////////////////////
+
+//#circulos#//
+
+const my_gradient = ctx.createLinearGradient(0, 0, 0, 170);
+my_gradient.addColorStop(0, "black");
+my_gradient.addColorStop(1, "white");
+
+
+ctx.fillStyle = my_gradient;
+ctx.beginPath();
+ctx.arc(50, 80, 50, 0, 2 * Math.PI);
+ctx.stroke();
+
+ctx.fillStyle = "orange";
+ctx.beginPath();
+ctx.arc(700, 80, 50, 0, 2 * Math.PI);
+ctx.stroke();
+ctx.fill();
+
+////////////////////////////////////////////////////
+//#texto#//
+ctx.font = "50px Georgia";
+ctx.fillText("kaizoku oni ore wa naru", 70, 200);
+ctx.font = "30px Verdana";
+
+////////////////////////////////////////////////////
+
+// Create Gradient
+ 
+ 
+ 
+
+</script>
+</body>
+</html>

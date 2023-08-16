@@ -13,14 +13,25 @@ ctx.lineTo(50, 115);
 ctx.stroke();
 
 ctx.beginPath();
-ctx.moveTo(50, 50);
-ctx.lineTo(115, 110);
-ctx.stroke();
+ctx.moveTo(50, 50);//posiciona la linea
+ctx.lineTo(115, 110);//
+ctx.stroke();//dibuja el contorno 
 
 ctx.beginPath();
 ctx.moveTo(50,115);
 ctx.lineTo(115, 110);
 ctx.stroke();
+ctx.fill
+
+// Create Gradient
+const my_gradient = ctx.createLinearGradient(50, 20, 130, 170);
+my_gradient.addColorStop(0, "pink");
+my_gradient.addColorStop(1, "red");
+my_gradient.addColorStop(1, "white");
+
+
+ctx.fillStyle = my_gradient;
+ctx.fillRect(20, 20, 150, 100);
 </script>
 
 </body>
