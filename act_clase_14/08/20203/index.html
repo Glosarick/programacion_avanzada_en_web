@@ -35,7 +35,15 @@ ctx.font = "30px Verdana";
 
 ////////////////////////////////////////////////////
 
-// Create Gradient
+// Create Radial
+const grd = ctx.createRadialGradient(75, 50, 5, 90, 60, 100);
+grd.addColorStop(0, "blue");
+grd.addColorStop(1, "white");
+
+// Draw a filled Rectangle
+ctx.fillStyle = grd;
+ctx.fillRect(10, 10, 150, 100);
+
  
  
  
