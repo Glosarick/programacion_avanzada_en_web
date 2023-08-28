@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FillRect & FillStyle</title>
+    <style>
+        canvas {
+            background-color: white;
+            border-color: black;
+            border-style: solid;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="500" height="500" id="myCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+         
+        canvas.addEventListener("mousedown", (event) => {
+             
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(255, 0, 255, 0.5)"; // Se crea el estilo del relleno de la figura
+            ctx.strokeStyle = "rgba(0, 0, 255, 0.5)" // se crea el estilo del contorno de la figura
+            ctx.arc(event.offsetX, event.offsetY , 50, 0, 2 * Math.PI); // se crea la figura
+            ctx.fill(); // Se le inserta el estilo relleno a la figura
+            ctx.stroke(); // se le inserta el estilo contorno a la figura
+        });
+
+
+    </script>
+</body>
+
+</html>
