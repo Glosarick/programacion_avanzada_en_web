@@ -1,38 +1,338 @@
-<!DOCTYPE html>
 <html>
-<body> 
+    <head>
+        <style>
+            canvas{
+                background-color: white; 
+            }
+            body{
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <center>
+            <canvas width="500" height="500" id="myCanvas"></canvas>
+        </center>
 
-<canvas id="myCanvas" width="300" height="150" style="border:1px solid grey"></canvas>
+        <img src="marinero.png" id="mi_imagen" style="display: none;" alt="">
 
-<script>
-const c = document.getElementById("myCanvas");
-const ctx = c.getContext("2d");
-ctx.beginPath();
-ctx.moveTo(50, 50);
-ctx.lineTo(50, 115);
-ctx.stroke();
+        <script>
+            
+            
+            var canvas = document.getElementById('myCanvas');
+            var ctx = canvas.getContext('2d');
+            var  dir = 0, speed = 10;
+            let score = 0;
+            let walls = [];
+            let pause = false;
 
-ctx.beginPath();
-ctx.moveTo(50, 50);//posiciona la linea
-ctx.lineTo(115, 110);//
-ctx.stroke();//dibuja el contorno 
+            class Cuadrado{
 
-ctx.beginPath();
-ctx.moveTo(50,115);
-ctx.lineTo(115, 110);
-ctx.stroke();
-ctx.fill
+                constructor(x,y,w,h,c){
+                    this.x = x;
+                    this.y = y;
+                    this.w = w;
+                    this.h = h;
+                    this.c = c;
+                }
 
-// Create Gradient
-const my_gradient = ctx.createLinearGradient(50, 20, 130, 170);
-my_gradient.addColorStop(0, "pink");
-my_gradient.addColorStop(1, "red");
-my_gradient.addColorStop(1, "white");
+                paint(ctx){
+
+                    ctx.fillStyle = this.c;
+                    ctx.fillRect(this.x,this.y,this.w,this.h);
+                    ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+                }
+
+                seTocan(otro){
+                    if(this.x < otro.x + otro.w &&  
+                       this.x + this.w > otro.x &&  
+                       this.y < otro.y + otro.h &&   
+                       this.y + this.h > otro.y  ) 
+                    { 
+                        return true;   
+                    }
+                    return false;
+                }
+
+            }
+
+            const player = new Cuadrado(225, 225,50,50,"black"); 
+            const target = new Cuadrado(randomInteger(460), randomInteger(460),40,40,"black");
+
+            walls.push( new Cuadrado(100,370,320,30,"gray") )
+            walls.push( new Cuadrado(100,70,320,30,"gray") )
+            walls.push( new Cuadrado(100,170,320,30,"gray") )
+
+            window.requestAnimationFrame = (function () {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 17);
+                    };
+            }());
+            
+            document.addEventListener("keydown", (e) =>{
+
+                if (!pause) {
+                    switch(e.keyCode){ 
+                        case 87:
+                            dir = 1;
+                        break;
+                        case 83:
+                            dir = 2;
+                        break;
+                        case 68:
+                            dir = 3;
+                        break; 
+                        case 65:
+                            dir = 4;
+                        break; 
+                    }  
+                }
+
+                switch(e.keyCode){  
+                    case 32:
+                         //speed+=5;
+                        pause = !pause;
+                    break;  
+                }
+
+            })
+
+            function update(){ 
+
+                if (!pause) {
+                    if (dir == 1) {
+                        player.y-=speed;
+                        if (player.y+50 < 0) {
+                            player.y = 550;
+                        }
+                    }
+                    if (dir == 2) {
+                        player.y+=speed;
+                        if (player.y+50 > 500) {
+                            player.y = -50;
+                        }
+                    }
+                    if (dir == 3) {
+                        player.x+=speed;
+                        if (player.x+50 > 500) {
+                            player.x = -50;
+                        }
+                    }
+                    if (dir == 4) {
+                        player.x-=speed;
+                        if (player.x+50 < 0) {
+                            player.x = 550;
+                        }
+                    } 
+
+                    if (player.seTocan(target)) {
+
+                        target.x = randomInteger(460);
+                        target.y = randomInteger(460);
+                        score+=10
+                    }
+
+                    for (var i = walls.length - 1; i >= 0; i--) { 
+
+                        if (player.seTocan(walls[i])) {
+                            
+
+                            if (dir == 1) {
+                                player.y+=speed;
+                            }
+                            if (dir == 2) {
+                                player.y-=speed;
+                            }
+                            if (dir == 3) {
+                                player.x-=speed;
+                            }
+                            if (dir == 4) {
+                                player.x+=speed;
+                            }
+                            dir = 0;
+                        }
+
+                        if (target.seTocan(walls[i])) {
+                            target.x = randomInteger(460);
+                            target.y = randomInteger(460);
+                        }
+                    } 
+
+                } 
+
+                paint(); 
+                window.requestAnimationFrame(update); 
+            }
+
+            //esta solo pinta
+            function paint()
+            {
+                ctx.fillStyle = "white";
+                ctx.fillRect(0,0,500,500);
+
+                ctx.font = "20px Georgia";
+                ctx.fillStyle = "black";
+                ctx.fillText("Escore: "+score, 5, 20);
+                
+                player.c = randomRgbColor();
+                player.paint(ctx); 
+
+                target.paint(ctx);
+
+                for (var i = walls.length - 1; i >= 0; i--) {
+                    walls[i].paint(ctx);
+                }
+
+                if (pause) {
+
+                    ctx.fillStyle = "rgba(154,160,154,0.5)";
+                    ctx.fillRect(0,0,500,500);
+
+                    ctx.font = "40px Georgia";
+                    ctx.fillStyle = "black";
+                    ctx.fillText("P A U S E", 185, 225);
+                }
+
+                // ctx.fillStyle = randomRgbColor();
+                // ctx.fillRect(x,y,50,50);
+                // ctx.strokeRect(x,y,50,50);
+
+            }
+
+            update();
 
 
-ctx.fillStyle = my_gradient;
-ctx.fillRect(10, 10, 150, 100);
-</script>
+            // while(true){
+            //     repaint();
+            // }
 
-</body>
+            /*var fig = true;
+            var color = randomRgbColor();
+            var pressed = false;
+            
+            canvas.addEventListener("mouseover", (e) => {
+                console.log("mouseover")
+
+                //color = randomRgbColor();
+                
+            })
+
+            canvas.addEventListener("mouseup", (e) => {
+                console.log("mouseup")
+
+                pressed = false;
+                
+            })
+
+            canvas.addEventListener("mouseout", (e) => {
+                console.log("mouseout")
+                fig = ((fig)?false:true);
+            }) 
+
+            canvas.addEventListener("mousedown", (e) => {
+                console.log("mousedown")
+                console.log(e)
+                pressed = true;
+                ctx.fillStyle = color;
+                if(true){  
+                    ctx.beginPath(); 
+                    ctx.arc(e.layerX,e.layerY, 50, 0, 2 * Math.PI );
+                    ctx.fill();
+                    ctx.stroke(); 
+                }else{
+
+                    ctx.fillRect(e.layerX-50,e.layerY-50,100,100);
+                    ctx.strokeRect(e.layerX-50,e.layerY-50,100,100);
+                }
+            })*/
+
+            /*canvas.addEventListener("mousemove", (e) => {
+                console.log("mousemove")
+                console.log(e)
+                if(pressed){ 
+                
+                    ctx.fillStyle = "black";
+
+                    ctx.beginPath(); 
+                    ctx.arc(e.layerX,e.layerY, 2, 0, 2 * Math.PI );
+                    ctx.fill(); 
+                }
+            })*/
+
+            /*
+            var imagen = document.getElementById("mi_imagen")
+
+            ctx.drawImage(imagen,380,20,150,150);
+
+            ctx.strokeRect(100,100,100,100);
+            
+            var grd = ctx.createLinearGradient(150,150,200,100);
+            grd.addColorStop(0,"#0DF2D6");
+            grd.addColorStop(0.3,"#F20DDD");
+            grd.addColorStop(0.6,"#F24B0D");
+            grd.addColorStop(1,"#2C0DF2");
+
+            ctx.fillStyle = grd;
+            ctx.fillRect(150,150,200,100);
+
+            ctx.fillStyle = "#46B5F9"; 
+            ctx.fillRect(200,200,100,100);
+
+            ctx.strokeStyle = "rgba(130,249,70,0.5)";
+            ctx.strokeRect(250,250,100,100);
+
+            ctx.beginPath();
+            ctx.moveTo(375,150);
+            ctx.lineTo(425,200);
+            ctx.lineTo(325,200);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.fillStyle = "orange";
+            ctx.arc(100, 380, 50, 0, 2 * Math.PI); 
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(160, 380, 50, 0, 2 * Math.PI); 
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(300, 380, 50, 1, 2 );
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.font = "40px Arial";
+            ctx.fillText("Hola mundo", 150,50)
+
+            ctx.strokeStyle = "#5AF20D";
+            ctx.strokeText("Hola mundo", 152,52)
+
+            var grd2 = ctx.createRadialGradient(415, 410, 5, 430, 420, 100); 
+            grd2.addColorStop(0, "red");
+            grd2.addColorStop(1, "white");
+
+            ctx.fillStyle = grd2;
+            ctx.fillRect(345,360,140,100);
+            */
+
+            function randomRgbColor() {
+                let r = randomInteger(255);
+                let g = randomInteger(255);
+                let b = randomInteger(255);
+                return "rgba("+r+","+g+","+b+",0.5)";
+            }
+            function randomInteger(max) {
+                return Math.floor(Math.random()*(max + 1));
+            } 
+        </script>
+    </body>
 </html>
